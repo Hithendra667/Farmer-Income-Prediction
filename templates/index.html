@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Income Prediction</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 30px;
+      background-color: #f5f5f5;
+    }
+
+    h1 {
+      color: #333;
+      text-align: center;
+    }
+
+    form {
+      background: white;
+      padding: 10px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      max-width: 900px;
+      margin: auto;
+    }
+
+    .form-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .form-group {
+      flex: 1 1 45%;
+    }
+
+    label {
+      display: block;
+      margin: 10px 0 5px;
+      font-weight: bold;
+    }
+
+    input {
+      width: 90%;
+      padding: 8px;
+      margin-bottom: 10px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+    }
+      .button-wrapper {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+
+    button {
+      background-color: #28a745;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 10px;
+      width: 40%;
+    }
+
+    .result {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 20px;
+      color: #0056b3;
+    }
+
+    .error {
+      color: red;
+      font-weight: bold;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <h1>Farmer Income Prediction</h1>
+
+  <form method="post" action="/">
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Min Temperature (Kharif 2021)</label>
+        <input type="number" name="K021-Ambient temperature-min" step="any" required value="{{ request.form.get('K021-Ambient temperature-min', '') }}">
+      </div>
+
+      <div class="form-group">
+        <label>Min Temperature (Kharif 2022)</label>
+        <input type="number" name="K022-Ambient temperature-min" step="any" required value="{{ request.form.get('K022-Ambient temperature-min', '') }}">
+      </div>
+
+      <div class="form-group">
+        <label>Min Temperature (Rabi 2022)</label>
+        <input type="number" name="R022-Ambient temperature-min" step="any" required value="{{ request.form.get('R022-Ambient temperature-min', '') }}">
+      </div>
+
+      <div class="form-group">
+        <label>Avg Rainfall (mm) (Kharif 2022)</label>
+        <input type="number" name="K022-Seasonal Average Rainfall (mm)" step="any" required value="{{ request.form.get('K022-Seasonal Average Rainfall (mm)', '') }}">
+      </div>
+
+      <div class="form-group">
+        <label>Avg Rainfall (mm) (Rabi 2021)</label>
+        <input type="number" name="R021-Seasonal Average Rainfall (mm)" step="any" required value="{{ request.form.get('R021-Seasonal Average Rainfall (mm)', '') }}">
+      </div>
+
+      <div class="form-group">
+        <label>Total Agricultural Land (acres)</label>
+        <input type="number" name="Total_Land_For_Agriculture" step="any" required value="{{ request.form.get('Total_Land_For_Agriculture', '') }}">
+      </div>
+
+      <div class="form-group">
+        <label>% Population with Electricity</label>
+        <input type="number" name="perc_of_pop_living_in_hh_electricity" step="any" required value="{{ request.form.get('perc_of_pop_living_in_hh_electricity', '') }}">
+      </div>
+
+      <div class="form-group">
+        <label>% Houses with Burnt Brick Walls</label>
+        <input type="number" name="perc_of_Wall_material_with_Burnt_brick" step="any" required value="{{ request.form.get('perc_of_Wall_material_with_Burnt_brick', '') }}">
+      </div>
+
+      <div class="form-group">
+        <label>Soil Type (1 - 8)</label>
+        <input type="number" name="Rabi Seasons Type of soil in 2022" step="any" required value="{{ request.form.get('Rabi Seasons Type of soil in 2022', '') }}">
+      </div>
+
+      <div class="form-group">
+        <label>Avg Groundwater Thickness (cm) – Rabi 2022</label>
+        <input type="number" name="Rabi Seasons Seasonal average groundwater thickness (cm) in 2022" step="any" required value="{{ request.form.get('Rabi Seasons Seasonal average groundwater thickness (cm) in 2022', '') }}">
+      </div>
+    </div>
+    <div class="button-wrapper">
+    <button type="submit">Predict Income</button>
+</div>
+
+    
+  </form>
+
+  {% if prediction %}
+    <div class="result">
+      <p><strong>Predicted Income:</strong> {{ prediction }} Lakhs</p>
+    </div>
+  {% endif %}
+
+  {% if error %}
+    <div class="error">Error: {{ error }}</div>
+  {% endif %}
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const firstInput = document.querySelector('input[name="K021-Ambient temperature-min"]');
+      const formInputs = document.querySelectorAll("form input");
+
+      let hasCleared = false;
+
+      firstInput.addEventListener("input", function () {
+        if (!hasCleared) {
+          formInputs.forEach((input, index) => {
+            if (index !== 0) {
+              input.value = "";
+            }
+          });
+          hasCleared = true;
+        }
+      });
+    });
+  </script>
+</body>
+</html>
