@@ -12,7 +12,9 @@ user interaction.
 
 ## 🛠️ Key Features
 
--   **Data Collection**: Data collected from company competition
+-   **Data Collection**:
+-   Path: data/farmer_data.xlsx is a data used to build the model
+-   Data collected from company competition
     datasets.
 -   **Data Processing**: Cleaned, transformed, and selected meaningful
     agricultural features (rainfall, groundwater thickness, soil type,
